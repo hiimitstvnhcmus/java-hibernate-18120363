@@ -424,6 +424,13 @@ public class Class_Subject_Student_GUI {
 		Import_panel.add(Import_text);
 
 		JButton Export_text = new JButton("Xuất ra CSV");
+		Export_text.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Class_Subject_Student> l = Class_Subject_StudentDAO.getList();
+				ParseFile.Export_by_Class_Subject_Student_dangky("dangky2.csv",l);
+				ParseFile.Export_by_Class_Subject_Student_diem("diem2.csv",l);
+			}
+		});
 		Import_panel.add(Export_text);
 
 		JButton home_bt = new JButton("back to Menu");

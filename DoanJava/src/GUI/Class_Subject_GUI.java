@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
@@ -30,9 +31,12 @@ import com.sun.jdi.Value;
 import DAO.ClassDAO;
 import DAO.Class_SubjectDAO;
 import DAO.Class_Subject_StudentDAO;
+import DAO.StudentDAO;
 import DAO.SubjectDAO;
+import File.ParseFile;
 import pojo.Class;
 import pojo.Class_Subject;
+import pojo.Student;
 import pojo.Subject;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
@@ -541,12 +545,47 @@ public class Class_Subject_GUI {
 		
 		panel.add(btnSua);
 		
-		JButton home_bt = new JButton("back to Menu");
-		springLayout.putConstraint(SpringLayout.NORTH, home_bt, 30, SpringLayout.SOUTH, panel);
-		springLayout.putConstraint(SpringLayout.WEST, home_bt, 10, SpringLayout.EAST, mon_lop_ScrollPane);
-		springLayout.putConstraint(SpringLayout.EAST, home_bt, -10, SpringLayout.EAST, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.SOUTH, home_bt, 48, SpringLayout.SOUTH, panel);
-		home_bt.addActionListener(new ActionListener() {
+		JPanel panel_1 = new JPanel();
+		springLayout.putConstraint(SpringLayout.NORTH, panel_1, 30, SpringLayout.SOUTH, panel);
+		springLayout.putConstraint(SpringLayout.WEST, panel_1, 10, SpringLayout.EAST, mon_lop_ScrollPane);
+		springLayout.putConstraint(SpringLayout.EAST, panel_1, -10, SpringLayout.EAST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.SOUTH, panel_1, 55, SpringLayout.SOUTH, panel);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(new GridLayout(0, 3, 0, 0));
+
+		
+		JButton inCSV_button = new JButton("Thêm từ CSV");
+		inCSV_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Class_Subject> l = ParseFile.to_Class_Subject("resources\\Class_Subject.csv");
+				
+				Iterator<Class_Subject> it = l.iterator();
+				
+				while (it.hasNext()) {
+					Class_Subject x = it.next();
+						if (Class_SubjectDAO.Find(x.getClassID(),x.getSubjectID()).size() > 0) {
+						continue;
+					}
+					Class_SubjectDAO.Add(x);
+				}
+				mon_lop_table.setModel(
+						new Class_Subject_Table(Class_SubjectDAO.getList(), new String[] { "Mã môn học", "Lớp", "Phòng" }));
+				mon_lop_ScrollPane.setViewportView(mon_lop_table);
+			}
+		});
+		panel_1.add(inCSV_button);
+		
+		JButton outCSV_button = new JButton("Xuất ra CSV");
+		outCSV_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Class_Subject> l = Class_SubjectDAO.getList();
+				ParseFile.Export_by_Class_Subject("Class_Subject2.csv",l);
+			}
+		});
+		panel_1.add(outCSV_button);
+		
+		JButton home_bt_1 = new JButton("back to Menu");
+		home_bt_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setVisible(false);
 				Menu_GUI.initialize();
@@ -554,8 +593,7 @@ public class Class_Subject_GUI {
 				frame.setVisible(true);
 			}
 		});
-		springLayout.putConstraint(SpringLayout.NORTH, home_bt, 23, SpringLayout.SOUTH, panel);
-		frame.getContentPane().add(home_bt);
+		panel_1.add(home_bt_1);
 		
 
 

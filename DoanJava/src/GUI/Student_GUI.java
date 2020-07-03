@@ -15,9 +15,11 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.tuple.component.PojoComponentTuplizer;
 
 import DAO.ClassDAO;
+import DAO.Class_Subject_StudentDAO;
 import DAO.StudentDAO;
 import DAO.SubjectDAO;
 import File.ParseFile;
+import pojo.Class_Subject_Student;
 import pojo.Student;
 import pojo.Subject;
 
@@ -298,6 +300,12 @@ public class Student_GUI {
 		panel_1.add(inCSV_button);
 
 		JButton outCSV_button = new JButton("Xuất ra CSV");
+		outCSV_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Student> l = StudentDAO.getList();
+				ParseFile.Export_by_Student("student2.csv",l);
+			}
+		});
 		panel_1.add(outCSV_button);
 		
 		JButton home_bt = new JButton("back to Menu");
