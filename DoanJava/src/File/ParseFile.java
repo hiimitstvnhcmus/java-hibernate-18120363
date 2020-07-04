@@ -1,19 +1,17 @@
 package File;
 
-import java.awt.Frame;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import DAO.StudentDAO;
 import DAO.SubjectDAO;
@@ -29,7 +27,7 @@ public class ParseFile {
 		String[] record;
 		List<String[]> records = new ArrayList<String[]>();
 
-		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8))){
 			br.read();
 
 			while ((line = br.readLine()) != null) {

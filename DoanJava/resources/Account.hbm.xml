@@ -9,6 +9,14 @@
     <property name="password" type="string">
       <column length="20" name="PASSWORDD"/>
     </property>
+	
+	<property name="isGiaovu" type="boolean">
+      <column name="ISGIAOVU"/>
+    </property>
+	
+	<property name="studentID" type="string">
+      <column length="8" name="STUDENTID"/>
+    </property>
 
   </class>
 </hibernate-mapping>

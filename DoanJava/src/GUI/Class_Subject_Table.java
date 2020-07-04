@@ -3,7 +3,6 @@ package GUI;
 import java.util.List;
 
 import pojo.Class_Subject;
-import pojo.Class_Subject_Student;
 
 public class Class_Subject_Table extends Table {
 	public Class_Subject_Table(List list, String[] columnNames) {

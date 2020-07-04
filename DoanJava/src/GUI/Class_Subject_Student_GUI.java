@@ -10,13 +10,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,10 +32,7 @@ import pojo.Student;
 import pojo.Subject;
 
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-
-import com.mysql.cj.protocol.a.result.TextBufferRow;
+import javax.swing.SwingConstants;
 
 public class Class_Subject_Student_GUI {
 
@@ -49,7 +44,11 @@ public class Class_Subject_Student_GUI {
 	private static JTextField Giuaky_text;
 	private static JTextField Diemkhac_text;
 	private static JTextField Diemtong_text;
-	private static JTable list;
+	private static JTable table;
+	private static JScrollPane list;
+	private static JLabel lblNewLabel_1;
+	private static JLabel lblNewLabel_2;
+	private static JLabel lblNewLabel_3;
 
 	/**
 	 * Launch the application.
@@ -73,24 +72,41 @@ public class Class_Subject_Student_GUI {
 	public Class_Subject_Student_GUI() {
 		initialize();
 	}
+	
+	private static void refresh() {
+		
+		table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
+				"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", "Kết quả" }));
+		list.setViewportView(table);
+		
+		int pass=0;
+		int n = table.getRowCount();
+		for (int i = 0; i < n; i++) {
+			if((float)table.getValueAt(i, 6)>=5) {
+				pass++;
+			}
+		}
+		
+		lblNewLabel_1.setText(String.valueOf(pass));
+		lblNewLabel_2.setText(String.valueOf(pass*100/n));
+		lblNewLabel_3.setText(String.valueOf(100-pass*100/n));
+	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	public static void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 380);
+		frame.setBounds(100, 100, 800, 480);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
 
-		JScrollPane list = new JScrollPane();
+		list = new JScrollPane();
 		frame.getContentPane().add(list);
 
-		JTable table = new JTable();
-		table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(),
-				new String[] { "Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", }));
+		table = new JTable();
+		table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
+				"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", "Kết quả" }));
 		springLayout.putConstraint(SpringLayout.NORTH, table, 10, SpringLayout.NORTH, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.WEST, table, 10, SpringLayout.WEST, frame.getContentPane());
 		springLayout.putConstraint(SpringLayout.SOUTH, table, -10, SpringLayout.SOUTH, frame.getContentPane());
@@ -286,9 +302,8 @@ public class Class_Subject_Student_GUI {
 				Class_Subject_StudentDAO.Add(new Class_Subject_Student(Lop_cb.getSelectedItem().toString(),
 						Ma_mon_cb.getSelectedItem().toString(), MSSV_cb.getSelectedItem().toString(), gk, ck, khac,
 						tong));
-				table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
-						"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", }));
-				list.setViewportView(table);
+				
+				refresh();
 			}
 		});
 		Sua_panel.add(Them_Button);
@@ -305,9 +320,8 @@ public class Class_Subject_Student_GUI {
 				String lop = (String) table.getValueAt(row, 2);
 
 				Class_Subject_StudentDAO.Delete(lop, mon, st);
-				table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
-						"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", }));
-				list.setViewportView(table);
+				
+				refresh();
 			}
 		});
 		Sua_panel.add(Xoa_button);
@@ -362,9 +376,8 @@ public class Class_Subject_Student_GUI {
 				Class_Subject_StudentDAO.Update(new Class_Subject_Student(Lop_cb.getSelectedItem().toString(),
 						Ma_mon_cb.getSelectedItem().toString(), MSSV_cb.getSelectedItem().toString(), gk, ck, khac,
 						tong));
-				table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
-						"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", }));
-				list.setViewportView(table);
+
+				refresh();
 			}
 		});
 		Sua_panel.add(Sua_button);
@@ -382,7 +395,7 @@ public class Class_Subject_Student_GUI {
 		Import_text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				List<Class_Subject_Student> l = ParseFile.To_Class_Subject_Student_by_dangky("resources\\Dangky.csv");
+				List<Class_Subject_Student> l = ParseFile.To_Class_Subject_Student_by_dangky("..\\data\\Dangky.csv");
 				Iterator<Class_Subject_Student> it = l.iterator();
 				while (it.hasNext()) {
 					Class_Subject_Student x = it.next();
@@ -390,8 +403,7 @@ public class Class_Subject_Student_GUI {
 					if (StudentDAO.Find(new Student(x.getStudentID(), "", "", "", "")).size() == 0) {
 						continue;
 					}
-					if (Class_SubjectDAO.Find(x.getClassID(), x.getSubjectID())
-							.size() == 0) {
+					if (Class_SubjectDAO.Find(x.getClassID(), x.getSubjectID()).size() == 0) {
 						continue;
 					}
 					if (Class_Subject_StudentDAO.Find(
@@ -403,7 +415,7 @@ public class Class_Subject_Student_GUI {
 					Class_Subject_StudentDAO.Add(x);
 				}
 
-				List<Class_Subject_Student> l2 = ParseFile.to_Class_Subject_Student_by_diem("resources\\Score.csv");
+				List<Class_Subject_Student> l2 = ParseFile.to_Class_Subject_Student_by_diem("..\\data\\Score.csv");
 				it = l2.iterator();
 				while (it.hasNext()) {
 					Class_Subject_Student x = it.next();
@@ -415,10 +427,9 @@ public class Class_Subject_Student_GUI {
 					Class_Subject_StudentDAO.Update(x);
 				}
 
-				table.setModel(new Class_Subject_Student_Table(Class_Subject_StudentDAO.getList(), new String[] {
-						"Mã sinh viên", "Mã môn học", "Lớp", "Điểm GK", "Điểm CK", "Điểm cộng", "Điểm TB", }));
-				list.setViewportView(table);
-
+				refresh();
+				
+				JOptionPane.showMessageDialog(new Frame(), "Nhập Score.csv và Dangky.csv thành công!!");
 			}
 		});
 		Import_panel.add(Import_text);
@@ -427,8 +438,10 @@ public class Class_Subject_Student_GUI {
 		Export_text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Class_Subject_Student> l = Class_Subject_StudentDAO.getList();
-				ParseFile.Export_by_Class_Subject_Student_dangky("dangky2.csv",l);
-				ParseFile.Export_by_Class_Subject_Student_diem("diem2.csv",l);
+				ParseFile.Export_by_Class_Subject_Student_dangky("..\\data\\out_Dangky.csv", l);
+				ParseFile.Export_by_Class_Subject_Student_diem("..\\data\\out_Score.csv", l);
+				JOptionPane.showMessageDialog(new Frame(), "Xuất out_Score.csv và out_Dangky.csv thành công!!");
+
 			}
 		});
 		Import_panel.add(Export_text);
@@ -444,6 +457,50 @@ public class Class_Subject_Student_GUI {
 			}
 		});
 		Import_panel.add(home_bt);
+
+		JLabel line0_lb = new JLabel("Thống kê :");
+		springLayout.putConstraint(SpringLayout.NORTH, line0_lb, 20, SpringLayout.SOUTH, Import_panel);
+		springLayout.putConstraint(SpringLayout.WEST, line0_lb, 10, SpringLayout.EAST, list);
+		frame.getContentPane().add(line0_lb);
+
+		JLabel line1_lb = new JLabel("\r\n\t- Số lượng sinh viên đậu là :");
+		springLayout.putConstraint(SpringLayout.NORTH, line1_lb, 10, SpringLayout.SOUTH, line0_lb);
+		springLayout.putConstraint(SpringLayout.WEST, line1_lb, 20, SpringLayout.EAST, list);
+		line1_lb.setHorizontalAlignment(SwingConstants.LEFT);
+		frame.getContentPane().add(line1_lb);
+
+		JLabel line2_lb = new JLabel("\r\n\t- Tỉ lệ đậu là:\r\n");
+		springLayout.putConstraint(SpringLayout.NORTH, line2_lb, 10, SpringLayout.SOUTH, line1_lb);
+		springLayout.putConstraint(SpringLayout.WEST, line2_lb, 20, SpringLayout.EAST, list);
+		line2_lb.setHorizontalAlignment(SwingConstants.CENTER);
+		frame.getContentPane().add(line2_lb);
+
+		JLabel line3_lb = new JLabel("- Tỉ lệ rớt là:");
+		springLayout.putConstraint(SpringLayout.NORTH, line3_lb, 10, SpringLayout.SOUTH, line2_lb);
+		springLayout.putConstraint(SpringLayout.WEST, line3_lb, 20, SpringLayout.EAST, list);
+		line3_lb.setHorizontalAlignment(SwingConstants.CENTER);
+		frame.getContentPane().add(line3_lb);
+
+		lblNewLabel_1 = new JLabel("New label");
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_1, 0, SpringLayout.NORTH, line1_lb);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_1, 10, SpringLayout.EAST, line1_lb);
+		frame.getContentPane().add(lblNewLabel_1);
+
+		lblNewLabel_2 = new JLabel("New label");
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_2, 0, SpringLayout.NORTH, line2_lb);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_2, 0, SpringLayout.WEST, lblNewLabel_1);
+
+		frame.getContentPane().add(lblNewLabel_2);
+
+		lblNewLabel_3 = new JLabel("New label");
+		springLayout.putConstraint(SpringLayout.NORTH, lblNewLabel_3, 0, SpringLayout.NORTH, line3_lb);
+		springLayout.putConstraint(SpringLayout.WEST, lblNewLabel_3, 0, SpringLayout.WEST, lblNewLabel_1);
+
+		frame.getContentPane().add(lblNewLabel_3);
+
+
+
+		refresh();
 
 	}
 }

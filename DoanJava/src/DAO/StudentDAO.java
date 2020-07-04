@@ -2,11 +2,7 @@ package DAO;
 
 import pojo.*;
 
-import java.awt.Frame;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

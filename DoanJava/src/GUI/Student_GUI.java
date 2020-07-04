@@ -3,42 +3,26 @@ package GUI;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 
-import java.awt.BorderLayout;
-import javax.swing.AbstractListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
-import javax.swing.table.DefaultTableModel;
 
-import org.hibernate.tuple.component.PojoComponentTuplizer;
 
 import DAO.ClassDAO;
-import DAO.Class_Subject_StudentDAO;
 import DAO.StudentDAO;
-import DAO.SubjectDAO;
 import File.ParseFile;
-import pojo.Class_Subject_Student;
 import pojo.Student;
-import pojo.Subject;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.awt.event.ActionEvent;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JLayeredPane;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Frame;
@@ -281,7 +265,7 @@ public class Student_GUI {
 		JButton inCSV_button = new JButton("Thêm từ CSV");
 		inCSV_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Student> l = ParseFile.to_Student("resources\\Student.csv");
+				List<Student> l = ParseFile.to_Student("..\\data\\Student.csv");
 				
 				Iterator<Student> it = l.iterator();
 				
@@ -294,7 +278,7 @@ public class Student_GUI {
 				}
 				table.setModel(new Student_Table(StudentDAO.getList(), new String[] { "Mã số sinh viên", "Họ và tên", "Giới tính", "Số cmnd", "Mã lớp" }));
 				list.setViewportView(table);
-
+				JOptionPane.showMessageDialog(new Frame(), "Nhập Subject.csv thành công!!");
 			}
 		});
 		panel_1.add(inCSV_button);
@@ -303,7 +287,8 @@ public class Student_GUI {
 		outCSV_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Student> l = StudentDAO.getList();
-				ParseFile.Export_by_Student("student2.csv",l);
+				ParseFile.Export_by_Student("..\\data\\out_Student.csv",l);
+				JOptionPane.showMessageDialog(new Frame(), "Xuất out_Subject.csv thành công!!");
 			}
 		});
 		panel_1.add(outCSV_button);

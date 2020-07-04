@@ -12,10 +12,8 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -26,26 +24,18 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import com.sun.jdi.Value;
 
 import DAO.ClassDAO;
 import DAO.Class_SubjectDAO;
-import DAO.Class_Subject_StudentDAO;
-import DAO.StudentDAO;
 import DAO.SubjectDAO;
 import File.ParseFile;
-import pojo.Class;
 import pojo.Class_Subject;
-import pojo.Student;
 import pojo.Subject;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
 
 import java.awt.Color;
 import javax.swing.JRadioButton;
-import javax.swing.JRadioButtonMenuItem;
 
 public class Class_Subject_GUI {
 
@@ -557,7 +547,7 @@ public class Class_Subject_GUI {
 		JButton inCSV_button = new JButton("Thêm từ CSV");
 		inCSV_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Class_Subject> l = ParseFile.to_Class_Subject("resources\\Class_Subject.csv");
+				List<Class_Subject> l = ParseFile.to_Class_Subject("..\\data\\Class_Subject.csv");
 				
 				Iterator<Class_Subject> it = l.iterator();
 				
@@ -571,6 +561,8 @@ public class Class_Subject_GUI {
 				mon_lop_table.setModel(
 						new Class_Subject_Table(Class_SubjectDAO.getList(), new String[] { "Mã môn học", "Lớp", "Phòng" }));
 				mon_lop_ScrollPane.setViewportView(mon_lop_table);
+				JOptionPane.showMessageDialog(new Frame(), "Nhập Class_Subject.csv thành công!!");
+
 			}
 		});
 		panel_1.add(inCSV_button);
@@ -579,7 +571,9 @@ public class Class_Subject_GUI {
 		outCSV_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Class_Subject> l = Class_SubjectDAO.getList();
-				ParseFile.Export_by_Class_Subject("Class_Subject2.csv",l);
+				ParseFile.Export_by_Class_Subject("..\\data\\out_Class_Subject.csv",l);
+				JOptionPane.showMessageDialog(new Frame(), "Xuất out_Class_Subject.csv thành công!!");
+
 			}
 		});
 		panel_1.add(outCSV_button);

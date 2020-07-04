@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.hibernate.HibernateException;
-import org.hibernate.MultiIdentifierLoadAccess;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -87,7 +86,7 @@ public class Class_SubjectDAO {
 
 			transaction = session.beginTransaction();
 
-			Query query = session.createQuery(
+				Query query = session.createQuery(
 					"from Class_Subject where classID = '" + classID + "' and subjectID = '" + subjectID + "'");
 			List<Class> result = query.list();
 			session.delete(result.get(0));

@@ -3,7 +3,6 @@ package GUI;
 import java.util.List;
 
 import pojo.Class_Subject_Student;
-import pojo.Student;
 
 public class Class_Subject_Student_Table extends Table {
 	
@@ -30,6 +29,8 @@ public class Class_Subject_Student_Table extends Table {
 			return x.getDiemCong();
 		case 6:
 			return x.getDiemTB();
+		case 7:
+			return x.getDiemTB()>=5?"Đậu":"Rớt";
 		}
 		return x;
 	}
@@ -51,6 +52,8 @@ public class Class_Subject_Student_Table extends Table {
 			return int.class;
 		case 6:
 			return int.class;
+		case 7:
+			return String.class;
 		}
 		return null;
 	}

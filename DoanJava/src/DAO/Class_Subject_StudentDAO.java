@@ -2,13 +2,9 @@ package DAO;
 
 import pojo.*;
 
-import java.awt.Frame;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import org.hibernate.HibernateException;
-import org.hibernate.MultiIdentifierLoadAccess;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;

@@ -37,21 +37,21 @@ public class Login_GUI {
 		});
 	}
 
-	public Login_GUI() {
+	public Login_GUI() {	
 		initialize();
 	}
 
 	private void initialize() {
 		frame = new JFrame("Login");
-		frame.setBounds(100, 100, 600, 400);
+		frame.setBounds(100, 100, 660, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		SpringLayout springLayout = new SpringLayout();
 		frame.getContentPane().setLayout(springLayout);
-
+		
 		JLabel avatar = new JLabel("");
-		avatar.setIcon(new ImageIcon("resources\\huan.jpg"));
+		avatar.setIcon(new ImageIcon("..\\data\\logo-khtn.png"));
 		springLayout.putConstraint(SpringLayout.NORTH, avatar, 10, SpringLayout.NORTH, frame.getContentPane());
-		springLayout.putConstraint(SpringLayout.WEST, avatar, 210, SpringLayout.WEST, frame.getContentPane());
+		springLayout.putConstraint(SpringLayout.WEST, avatar, 200, SpringLayout.WEST, frame.getContentPane());
 		frame.getContentPane().add(avatar);
 
 		JLabel user_label = new JLabel("T\u00EAn \u0111\u0103ng nh\u1EADp");
@@ -87,12 +87,17 @@ public class Login_GUI {
 					return;
 				}
 
-				List<Account> list = AccountDAO.Find(new Account(user_text.getText(), pass_text.getText()));
+				List<Account> list = AccountDAO.Find(new Account(user_text.getText(), pass_text.getText(),false,""));
 
+			
 				if (list.size() != 1) {
 					JOptionPane.showMessageDialog(new Frame(), "Sai tai khoan hoac mat khau!!");
 				} else {
 					frame.setVisible(false);
+					Menu_GUI.isGiaovu = list.get(0).getIsGiaovu();
+					BangDiem_GUI.studentID = list.get(0).getStudentID();
+					JOptionPane.showMessageDialog(new Frame(), list.get(0).getStudentID());
+
 					Menu_GUI.initialize();
 					frame = Menu_GUI.frame;
 					frame.setVisible(true);
@@ -102,7 +107,7 @@ public class Login_GUI {
 		});
 		springLayout.putConstraint(SpringLayout.NORTH, dangnhap_button, 15, SpringLayout.SOUTH, pass_text);
 		springLayout.putConstraint(SpringLayout.WEST, dangnhap_button, -10, SpringLayout.WEST, avatar);
-		springLayout.putConstraint(SpringLayout.EAST, dangnhap_button, 85, SpringLayout.WEST, avatar);
+		springLayout.putConstraint(SpringLayout.EAST, dangnhap_button, 120, SpringLayout.WEST, avatar);
 		frame.getContentPane().add(dangnhap_button);
 
 		JButton dangky_button = new JButton("\u0110\u0103ng k\u00FD");
@@ -114,12 +119,12 @@ public class Login_GUI {
 					return;
 				}
 
-				List<Account> list = AccountDAO.Find(new Account(user_text.getText(),"") );
+				List<Account> list = AccountDAO.Find(new Account(user_text.getText(),"",false,"") );
 
 				if (list.size() != 0) {
 					JOptionPane.showMessageDialog(new Frame(), "Tai khoan da ton tai");
 				} else {
-					AccountDAO.Add(new Account(user_text.getText(), pass_text.getText()));
+					AccountDAO.Add(new Account(user_text.getText(), pass_text.getText(),false,""));
 					JOptionPane.showMessageDialog(new Frame(), "Dang ky thanh cong!!");
 				}
 
@@ -131,7 +136,7 @@ public class Login_GUI {
 		frame.getContentPane().add(dangky_button);
 
 		JLabel background = new JLabel("");
-		background.setIcon(new ImageIcon("resources//background.jpg"));
+		background.setIcon(new ImageIcon("..\\data\\background.jpg"));
 		frame.getContentPane().add(background);
 
 	}

@@ -12,6 +12,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import GUI.Menu_GUI;
+
 import org.hibernate.SessionFactory;
 
 public class AccountDAO {
@@ -118,6 +120,7 @@ public class AccountDAO {
             
             Query query = session.createQuery("from Account where " + condition );
             List<Account> result = query.list();
+            
             transaction.commit();
             return result;
             
@@ -129,26 +132,6 @@ public class AccountDAO {
             session.close();
         }
 		return null;
-	}
-
-	// Method to PRINT
-	public static void Print() {
-
-		Session session = factory.openSession();
-
-		try {
-
-			List<Subject> l = session.createQuery("FROM Account").list();
-			for (int i = 0; i < l.size(); i++) {
-				System.out.print("username: " + l.get(i).getiD());
-				System.out.print(" password: " + l.get(i).getName());
-			}
-
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
 	}
 
 }
